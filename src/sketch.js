@@ -4,6 +4,7 @@ var gen_handle = new Handle(350, 400, 20, 60,1)
 function setup(){
     createCanvas(800, 800)
     gen_blade.roll()
+    noLoop()
 }
 
 function draw(){
@@ -19,4 +20,5 @@ function draw(){
 
 function mousePressed(){
     gen_blade.roll() 
+    loop()
 }

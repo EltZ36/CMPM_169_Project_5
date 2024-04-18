@@ -13,8 +13,9 @@ class Blade {
 
     roll(){
         if(this.shape == 0){   
-            this.width = random(20, 170)
-            this.leftYOffset = random(this.width, this.width + 100)
+            this.width = random(20, 177)
+            this.leftYOffset = random(this.width, this.width + 151)
+            this.middleOffset = random(20, 51)
         }
         if(this.shape == 1){
             //this.leftOffsetBottom =   
@@ -42,7 +43,7 @@ class Blade {
         if(this.shape == 0){
             //+offset or whatever 
             vertex(this.x + this.width, this.y - this.leftYOffset);
-            bezierVertex(this.x + this.width, this.y - this.leftYOffset, this.x + this.width + 15, this.y - 20, this.x + this.width + 5 , this.y)
+            bezierVertex(this.x + this.width, this.y - this.leftYOffset, this.x + this.width +this.middleOffset, this.y - 35, this.x + this.width + 5 , this.y)
             vertex(this.x + this.width, this.y)
             //fill(230)
             //ellipse(this.x + this.rightXOffset - 200, this.y - this.leftYOffset, 13, 13)
@@ -53,12 +54,15 @@ class Blade {
         //make sure the handle offset is the correct length too 
         //the limit is 5 and the knife width should be equal to the handle width 
         endShape()
-        //heel 
+        //heel and blade patterns 
         //different type = different color 
         //make the heel just a slightly lower gradient color to help with this 
         if(this.shape == 0){
             fill(210)
-            rect(this.x, this.y, this.width, this.height - 48)
+            rect(this.x, this.y, 20, this.height - 48)
+            //calculate the space between the x width and y width to randomly place triangles around 
+            //change fill as a result with random gradients? 
+
         }
         if(this.shape == 1){
             fill(200)
@@ -98,6 +102,47 @@ class Blade {
     
     setHellVis(show){
         this.showHeel = show 
+    }
+
+    /*from gpt: "I want to put a random number of triangles on a rectangle in p5.js. I want to make sure that the triangles don't overlap the boundaries of the rectangle and stay inside of it. "
+    "i also want to make sure that there isn't too much overlap between the triangles and their positions
+    "*/ 
+    generateBladePattern(){
+        //maybe make the triangles a random number 
+        var numTriangles = 10; 
+        for (let i = 0; i < numTriangles; i++) {
+            let x1, y1, x2, y2, x3, y3;
+        do {
+              x1 = random(50, 50 + rectWidth);
+              y1 = random(50, 50 + rectHeight);
+              x2 = random(50, 50 + rectWidth);
+              y2 = random(50, 50 + rectHeight);
+              x3 = random(50, 50 + rectWidth);
+              y3 = random(50, 50 + rectHeight);
+        } 
+        while (isOverlapping(x1, y1, x2, y2, x3, y3));
+            triangles.push({x1, y1, x2, y2, x3, y3});
+        }
+        for (let i = 0; i < triangles.length; i++) {
+            triangle(
+              triangles[i].x1, triangles[i].y1,
+              triangles[i].x2, triangles[i].y2,
+              triangles[i].x3, triangles[i].y3
+            );
+          }
+    }
+
+    isOverlapping(x1, y1, x2, y2, x3, y3) {
+        var minDistance = 20; 
+        for (let i = 0; i < triangles.length; i++) {
+          let d1 = dist(x1, y1, triangles[i].x1, triangles[i].y1);
+          let d2 = dist(x2, y2, triangles[i].x2, triangles[i].y2);
+          let d3 = dist(x3, y3, triangles[i].x3, triangles[i].y3);
+          if (d1 < minDistance || d2 < minDistance || d3 < minDistance) {
+            return true;
+          }
+        }
+        return false;
     }
 }
 
