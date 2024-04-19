@@ -15,7 +15,7 @@ class Blade {
     roll(){
         if(this.showHeel == true){   
             this.width = random(20, 177)
-            this.leftYOffset = random(this.width, this.width + 151)
+            this.leftYOffset = random(this.width, this.width + 171)
             this.middleOffset = random(20, 51)
         }
         if(this.showHeel == false){
@@ -157,7 +157,12 @@ class Blade {
     generateBladePattern(){
         this.triangleArray = []
         //maybe make the triangles a random number 
-        var numTriangles = random(2, 16); 
+        if(this.showHeel == false){
+            var numTriangles = random(1, 5); 
+        }
+        else{
+            var numTriangles = random(2, 16); 
+        }
         //numTriangles = 2
         //if(this.isGenerated != true){
         if (this.triangleArray.length == 0){
@@ -173,11 +178,11 @@ class Blade {
               y3 = random(this.y, this.y - this.leftYOffset);
             }
             else{
-              x1 = random(this.x, this.x + this.width);
+              x1 = random(this.x, this.x + this.width - 20);
               y1 = random(this.y, this.y - this.leftYOffset);
-              x2 = random(this.x , this.x + this.width);
+              x2 = random(this.x , this.x + this.width - 20);
               y2 = random(this.y, this.y - this.leftYOffset);
-              x3 = random(this.x, this.x + this.width);
+              x3 = random(this.x, this.x + this.width - 20);
               y3 = random(this.y, this.y - this.leftYOffset);
             }
         } 
