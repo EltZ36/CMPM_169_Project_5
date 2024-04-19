@@ -35,7 +35,7 @@ class Blade {
         //background(0)
         push()
         scale(this.size)
-        translate(-200 * (this.size- 1), -200* (this.size - 1));
+        translate(-200 * (this.size - 1), -200 * (this.size - 1));
         fill(190)
         //the blade itself 
         beginShape()
@@ -58,14 +58,6 @@ class Blade {
         //make sure the handle offset is the correct length too 
         //the limit is 5 and the knife width should be equal to the handle width 
         endShape()
-        /*stroke(255,0, 0)
-        strokeWeight(3)
-        point(this.x + this.width, this.y - 20)
-        stroke(0,255, 0)
-        point(this.x + this.middleOffset, this.y -  this.leftYOffset)
-        stroke(0,0,255)
-        point(this.x + 5, this.y - this.leftYOffset)
-        noStroke()*/ 
         //heel and blade patterns 
         //different type = different color 
         //make the heel just a slightly lower gradient color to help with this 
@@ -79,7 +71,6 @@ class Blade {
             fill(200)
             rect(this.x, this.y, this.width, this.height - 48)
         }
-        pop()
         //make the random triangle pattern 
         fill(this.patternColorRed,this.patternColorBlue ,this.patternColorGreen)
         for (let i = 0; i < this.triangleArray.length; i++) {
@@ -88,7 +79,9 @@ class Blade {
               this.triangleArray[i].x2, this.triangleArray[i].y2,
               this.triangleArray[i].x3, this.triangleArray[i].y3
             );
+            //rect(this.triangleArray[i].x1, this.triangleArray[i].x1, 20, 20)
         }
+        pop()
     }
 
     setX(x) {
@@ -142,15 +135,32 @@ class Blade {
         }
     }
 
+    getWidth(){
+        return this.width
+    }
+
+    setWidth(newWidth){
+        this.width = newWidth
+    }
+
+    setMiddleOffset(offset){
+        this.middleOffset = offset 
+    }
+
+    getMiddleOffset(){
+        return this.middleOffset
+    }
+
     /*from gpt: "I want to put a random number of triangles on a rectangle in p5.js. I want to make sure that the triangles don't overlap the boundaries of the rectangle and stay inside of it. "
     "i also want to make sure that there isn't too much overlap between the triangles and their positions
     "*/ 
     generateBladePattern(){
         this.triangleArray = []
         //maybe make the triangles a random number 
-        var numTriangles = random(5, 15); 
+        var numTriangles = random(2, 16); 
+        //numTriangles = 2
         //if(this.isGenerated != true){
-        if (this.triangleArray.length === 0){
+        if (this.triangleArray.length == 0){
         for (let i = 0; i < numTriangles; i++) {
             let x1, y1, x2, y2, x3, y3;
         do {
@@ -162,8 +172,16 @@ class Blade {
               x3 = random(this.x, this.x + this.width);
               y3 = random(this.y, this.y - this.leftYOffset);
             }
+            else{
+              x1 = random(this.x, this.x + this.width);
+              y1 = random(this.y, this.y - this.leftYOffset);
+              x2 = random(this.x , this.x + this.width);
+              y2 = random(this.y, this.y - this.leftYOffset);
+              x3 = random(this.x, this.x + this.width);
+              y3 = random(this.y, this.y - this.leftYOffset);
+            }
         } 
-        while (this.isOverlapping(x1, y1, x2, y2, x3, y3));
+        while (this.isOverlapping(x1, y1, x2, y2, x3, y3) == false);
             this.triangleArray.push({x1, y1, x2, y2, x3, y3});
         }
         //draw out the triangles 
@@ -171,30 +189,16 @@ class Blade {
         //}
         }
     }
-
     isOverlapping(x1, y1, x2, y2, x3, y3) {
         // Check if any vertex of the triangle is outside the blade boundaries
-        if (x1 < this.x || x1 > this.x + this.width ||
-            x2 < this.x || x2 > this.x + this.width ||
-            x3 < this.x || x3 > this.x + this.width ||
-            y1 > this.y || y2 > this.y || y3 > this.y) {
+        if((x1 < this.x || x1 > this.x + (this.width - 50)||
+            x2 < this.x || x2 > this.x + (this.width - 50)||
+            x3 < this.x || x3 > this.x + (this.width - 50) ||
+            y1 > this.y || y2 > this.y || y3 > this.y  || y1 > this.y - this.leftYOffset || y2 > this.y - this.leftYOffset || y3 > this.y - this.leftYOffset)) {
             return true; // Overlapping
         }
         return false; // Not overlapping
     }
-
-    /*isOverlapping(x1, y1, x2, y2, x3, y3) {
-        var minDistance = 20; 
-        for (let i = 0; i < this.triangleArray.length; i++) {
-          let d1 = dist(x1, y1, this.triangleArray[i].x1, this.triangleArray[i].y1);
-          let d2 = dist(x2, y2, this.triangleArray[i].x2, this.triangleArray[i].y2);
-          let d3 = dist(x3, y3, this.triangleArray[i].x3, this.triangleArray[i].y3);
-          if (d1 < minDistance || d2 < minDistance || d3 < minDistance) {
-            return true;
-          }
-        }
-        return false;
-    }*/
 }
 
 class Handle{
@@ -211,7 +215,7 @@ class Handle{
         push()
         scale(this.size)
         translate(-200 * (this.size- 1), -200* (this.size - 1));
-        fill(100);
+        //fill(this.patternColorRed,this.patternColorBlue ,this.patternColorGreen)
         //the handle part 
         rect(this.x, this.y+10, this.width, this.height)
         //these variables should be adjustable 
