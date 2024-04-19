@@ -1,9 +1,14 @@
 var gen_blade = new Blade(350, 400, 20, 60, 1)
 var gen_handle = new Handle(350, 400, 20, 60, 1)
 let switchButton, genButton, scaleSlider;
+let img 
+
+function preload(){
+    img = loadImage('assets/img/qrcode.png')
+}
 
 function setup() {
-    createCanvas(800, 800)
+    let cnv = createCanvas(800, 800)
     textSize(18);
     //noLoop()
     patternColorRed = random(0, 256)
@@ -34,17 +39,21 @@ function setup() {
     scaleSlider = createSlider(0.5, 2.5, 1, 0.1)
     scaleSlider.position(600, 10)
     gen_blade.generateBladePattern()
-    //getLink = createButton('Copy Link')
-    //getLink.position(10, 40)
-    //getLink.mousePressed()
+    getImage = createButton('Download Image')
+    getImage.position(20, 70)
+    getImage.mousePressed(() => {
+        saveCanvas(cnv, 'Knife', 'jpg')
+    })
 }
 
 function draw() {
     background(245)
     //priori artifact 
     //gen_blade.setHeelStatus()
+    image(img, 600, 600)
     fill(0)
-    text('Adjust Size', 600, 30, 50);
+    text('Create more with this qr code:', 550, 580)
+    text('Adjust Size', 600, 50);
     gen_blade.show()
     fill(patternColorRed, patternColorBlue, patternColorGreen)
     gen_handle.show()
@@ -76,33 +85,3 @@ function setKnifeSize() {
 function makeBladePattern() {
     gen_blade.generateBladePattern()
 }
-
-/*function createURL() {
-    //pulled from MDN documentation https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/URLSearchParams
-    //also used gpt with prompt: I want you to create an url to this code.  There should be params inside this url that can be applied to the project again. The params that I want are the width of the blade handle so its gen_blade.getWidth, gen_blade.getHeelStatus, gen_blade.getMiddleOffset
-    const url = new URL("https://CMPM169_Project2.com")
-    const add_params = {
-        width: gen_blade.getWidth(),
-        heel: gen_blade.getHeelStatus(),
-        offset: gen_blade.getMiddleOffset(),
-    }
-    const new_params = new URLSearchParams(add_params)
-    console.log(new_params)
-    const new_url = (`${url}${new_params}`)
-    console.log(new_url)
-
-    // Creating a button to copy the URL
-    const copyButton = document.createElement('button');
-    copyButton.textContent = 'Copy URL';
-    document.body.appendChild(copyButton);
-    //another gpt with prompt: how would I then copy the link from a button click adding onto the additonal one from line 81
-    // Adding click event listener to the button
-    copyButton.addEventListener('click', function () {
-        // Copying the URL to the clipboard
-        navigator.clipboard.writeText(new_url).then(function () {
-            console.log('URL copied to clipboard!');
-        }, function (err) {
-            console.error('Could not copy URL: ', err);
-        });
-    });
-}*/
