@@ -119,11 +119,20 @@ function showPattern(){
   // Render the grid with hexagons
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
+      //let x = i * resolution + 5;
+      //let y = j * resolution;
+
       let x = i * resolution + 5;
       let y = j * resolution;
+      let noiseValX = noise(i * 0.5, j * 0.5); // Adjust the noise scale as needed
+      let noiseValY = noise(i * 0.1 + 10, j * 0.1 + 10); // Adjust the noise scale as needed
+
+      // Adjust shape positions based on Perlin noise
+
       if (i % 2 == 0) {
         y += resolution / 2;
-      }
+      } 
+
       if (grid[i][j] == 1) {
         if(color == 'Black and White'){
             strokeWeight(1)
@@ -138,6 +147,8 @@ function showPattern(){
             fill(random(0, 255), random(0, 255), random(0, 255))
         }
         stroke(0);
+        x += map(noiseValX, 0, 1, -15, 10);
+        y += map(noiseValY, 0, 1, -10, 10);
         polygon(x, y, resolution / 2 - 1, vertexNumber);
       }
       if (grid[i][j] == 0){
