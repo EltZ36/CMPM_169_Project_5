@@ -10,6 +10,8 @@ let color
 let neighborNumber
 let resolutionDropdown;
 let vertexNumber
+let circleColor 
+let isPaused = false;
 
 //this code for the game of life is from gpt and asking how to do it in a hex. I then also looked at other code on the game of life hex as well. 
 
@@ -19,12 +21,14 @@ function setStart(){
   startButton.hide()
 }
 
+
 function setup() {
   createCanvas(600, 600);
   cols = width  / resolution;
   rows = height  / resolution;
   grid = make2DArray(cols, rows);
   vertexNumber = floor(random(3, 9))
+  circleColor = [random(0, 256), random(0, 256), random(0, 256)]
 
   //create grid of random 
   assignLife()
@@ -44,12 +48,13 @@ function setup() {
   colorDropdown = createSelect();
   colorDropdown.position(100, 700);
   colorDropdown.option('Black and White');
-  colorDropdown.option('random color');
-  colorDropdown.selected('black'); // Default selected value
+  colorDropdown.option('No fill');
+  colorDropdown.option('Random');
+  colorDropdown.selected('Black and White'); // Default selected value
 
   neighDropdown = createSelect();
   neighDropdown.position(60, 700);
-  for (let i = 2; i <= 4; i += 1) {
+  for (let i = 2; i <= 6; i += 1) {
     neighDropdown.option(i.toString());
   }
 }
@@ -62,6 +67,16 @@ function assignLife(){
     }
 }
 
+function keyPressed(){
+    if (key === 'p') {
+        isPaused = !isPaused; 
+        if (isPaused) {
+          noLoop(); 
+        } else {
+          loop();
+        }
+      }
+}
 
 function draw() {
   frameRate(10);
@@ -90,7 +105,7 @@ function showPattern(){
       if (neighbors == neighborNumber){
         next[i][j] = state; // stay the same  
       } 
-      else if ((state == 0 && neighbors == neighborNumber - 1)) {
+      else if (state == 0 && (neighbors == neighborNumber - 1 || neighbors > neighborNumber)) {
         next[i][j] = 1; //life/random shape
       } 
       else{
@@ -110,13 +125,25 @@ function showPattern(){
         y += resolution / 2;
       }
       if (grid[i][j] == 1) {
-        fill(0);
+        if(color == 'Black and White'){
+            strokeWeight(1)
+            fill(0);
+        }
+        if(color == "noFill"){
+            strokeWeight(4)
+            noFill()
+        }
+        if(color == 'Random'){
+            strokeWeight(1)
+            fill(random(0, 255), random(0, 255), random(0, 255))
+        }
         stroke(0);
         polygon(x, y, resolution / 2 - 1, vertexNumber);
       }
       if (grid[i][j] == 0){
-        fill(255);
+        fill(circleColor);
         stroke(0)
+        strokeWeight(1)
         ellipse(x,y, resolution/2 - 1, resolution/2 - 1)
       }
     }
