@@ -46,7 +46,8 @@ function setup() {
   resolutionDropdown.selected('10'); // Default selected value
   
   colorDropdown = createSelect();
-  colorDropdown.position(100, 700);
+  colorDropdown.position(270, 700);
+  colorDropdown.option('Select Color');
   colorDropdown.option('Black and White');
   colorDropdown.option('No fill');
   colorDropdown.option('Random');
@@ -54,6 +55,7 @@ function setup() {
 
   neighDropdown = createSelect();
   neighDropdown.position(60, 700);
+  neighDropdown.option('Change Number of Neighbors')
   for (let i = 2; i <= 6; i += 1) {
     neighDropdown.option(i.toString());
   }
