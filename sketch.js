@@ -11,6 +11,7 @@ let neighborNumber
 let resolutionDropdown;
 let vertexNumber
 let circleColor 
+let polyColor
 let isPaused = false;
 
 //this code for the game of life is from gpt and asking how to do it in a hex grid. 
@@ -30,6 +31,7 @@ function setup() {
   grid = make2DArray(cols, rows);
   vertexNumber = floor(random(3, 9))
   circleColor = [random(0, 256), random(0, 256), random(0, 256)]
+  polyColor = [floor(random(0, 256)), floor(random(0, 256)), floor(random(0, 256))]
 
   //create grid of random 
   assignLife()
@@ -146,7 +148,12 @@ function showPattern(){
         }
         if(color == 'Random'){
             strokeWeight(1)
-            fill(random(0, 255), random(0, 255), random(0, 255))
+            //using perlin to change the ellipse color
+            //pulled from gpt asking about adding perlin noise to this
+            // Adjust the noise scale as needed
+            // Adjust colors based on Perlin noise
+            fill(floor(random(0, 256)), floor(random(0, 256)), floor(random(0, 256)))
+            vertexNumber = random(3, 10)
         }
         stroke(0);
         //adjust the shape positions with perlin noise and have it not be so stuck on the grid. 
