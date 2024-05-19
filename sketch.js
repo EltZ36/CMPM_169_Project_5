@@ -141,7 +141,19 @@ function showPattern(){
         polygon(x, y, resolution / 2 - 1, vertexNumber);
       }
       if (grid[i][j] == 0){
-        fill(circleColor);
+        if(color == 'Random'){
+            //using perlin to change the ellipse color
+            //pulled from gpt asking about adding perlin noise to this
+            let noiseVal = noise(i * 0.5, j * 0.5); // Adjust the noise scale as needed
+            // Adjust colors based on Perlin noise
+            let r = map(noiseVal, 0, 1, 0, circleColor[0]);
+            let g = map(noiseVal, 0, 1, 0,circleColor[1]);
+            let b = map(noiseVal, 0, 1, 0, circleColor[2]);
+            fill(r, g, b);
+        }
+        else{
+            fill(255);
+        }
         stroke(0)
         strokeWeight(1)
         ellipse(x,y, resolution/2 - 1, resolution/2 - 1)
