@@ -13,7 +13,8 @@ let vertexNumber
 let circleColor 
 let isPaused = false;
 
-//this code for the game of life is from gpt and asking how to do it in a hex. I then also looked at other code on the game of life hex as well. 
+//this code for the game of life is from gpt and asking how to do it in a hex grid. 
+//I then also looked at other code on the game of life hex as well. 
 
 function setStart(){
   startFlag = !startFlag
@@ -37,7 +38,7 @@ function setup() {
   startButton.position(10, 670);
   startButton.mousePressed(setStart);
   
-  //from gpt asking about droppers and how to add one in 
+  //from gpt asking about droppers and how to add one in and have it click. I also looked at the p5.js documentation for more help
   resolutionDropdown = createSelect();
   resolutionDropdown.position(10, 700);
   for (let i = 10; i <= 50; i += 5) {
@@ -51,7 +52,7 @@ function setup() {
   colorDropdown.option('Black and White');
   colorDropdown.option('No fill');
   colorDropdown.option('Random');
-  colorDropdown.selected('Black and White'); // Default selected value
+  colorDropdown.selected('Select Color'); // Default selected value
 
   neighDropdown = createSelect();
   neighDropdown.position(60, 700);
@@ -86,9 +87,11 @@ function draw() {
   resolution = parseInt(resolutionDropdown.value());
   neighborNumber = parseInt(neighDropdown.value());
   color = colorDropdown.value() 
+  //show with start button 
   if(startFlag == true){
      showPattern()
   }
+  //restart the pattern 
   if (mouseIsPressed){
     assignLife()
   }
@@ -128,9 +131,6 @@ function showPattern(){
       let y = j * resolution;
       let noiseValX = noise(i * 0.5, j * 0.5); // Adjust the noise scale as needed
       let noiseValY = noise(i * 0.1 + 10, j * 0.1 + 10); // Adjust the noise scale as needed
-
-      // Adjust shape positions based on Perlin noise
-
       if (i % 2 == 0) {
         y += resolution / 2;
       } 
@@ -149,6 +149,7 @@ function showPattern(){
             fill(random(0, 255), random(0, 255), random(0, 255))
         }
         stroke(0);
+        //adjust the shape positions with perlin noise and have it not be so stuck on the grid. 
         x += map(noiseValX, 0, 1, -15, 10);
         y += map(noiseValY, 0, 1, -10, 10);
         polygon(x, y, resolution / 2 - 1, vertexNumber);
