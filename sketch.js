@@ -6,6 +6,10 @@ let resolution = 10
 let startFlag = false 
 let stopFlag = false 
 let startButton
+let color 
+let neighborNumber
+let resolutionDropdown;
+let vertexNumber
 
 //this code for the game of life is from gpt and asking how to do it in a hex. I then also looked at other code on the game of life hex as well. 
 
@@ -15,29 +19,19 @@ function setStart(){
   startButton.hide()
 }
 
-function restart(){
-
-}
-
-let resolutionDropdown;
-
 function setup() {
   createCanvas(600, 600);
   cols = width  / resolution;
   rows = height  / resolution;
   grid = make2DArray(cols, rows);
-  for (let i = 0; i < cols; i++) {
-    for (let j = 0; j < rows; j++) {
-      grid[i][j] = floor(random(0,2)); // Randomly assign alive or dead
-    }
-  }
+  vertexNumber = floor(random(3, 9))
+
+  //create grid of random 
+  assignLife()
   
   startButton = createButton('Start');
   startButton.position(10, 670);
   startButton.mousePressed(setStart);
-  button = createButton('Restart');
-  button.position(80, 670);
-  button.mousePressed(restart);
   
   //from gpt asking about droppers and how to add one in 
   resolutionDropdown = createSelect();
@@ -47,16 +41,39 @@ function setup() {
   }
   resolutionDropdown.selected('10'); // Default selected value
   
+  colorDropdown = createSelect();
+  colorDropdown.position(100, 700);
+  colorDropdown.option('Black and White');
+  colorDropdown.option('random color');
+  colorDropdown.selected('black'); // Default selected value
+
+  neighDropdown = createSelect();
+  neighDropdown.position(60, 700);
+  for (let i = 2; i <= 4; i += 1) {
+    neighDropdown.option(i.toString());
+  }
 }
 
+function assignLife(){
+    for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+          grid[i][j] = floor(random(0,2)); // Randomly assign alive or dead
+        }
+    }
+}
 
 
 function draw() {
   frameRate(10);
   background(240);
   resolution = parseInt(resolutionDropdown.value());
+  neighborNumber = parseInt(neighDropdown.value());
+  color = colorDropdown.value() 
   if(startFlag == true){
      showPattern()
+  }
+  if (mouseIsPressed){
+    assignLife()
   }
 }
 
@@ -70,10 +87,10 @@ function showPattern(){
       let neighbors = countNeighbors(grid, i, j);
 
       //logic snippet from: https://matejker.github.io on the function createNextGen() 
-      if (neighbors == 3){
+      if (neighbors == neighborNumber){
         next[i][j] = state; // stay the same  
       } 
-      else if ((state == 0 && neighbors == 2)) {
+      else if ((state == 0 && neighbors == neighborNumber - 1)) {
         next[i][j] = 1; //life/random shape
       } 
       else{
@@ -93,14 +110,14 @@ function showPattern(){
         y += resolution / 2;
       }
       if (grid[i][j] == 1) {
-        fill(255);
+        fill(0);
         stroke(0);
-        ellipse(x,y, resolution/2 - 1, resolution/2 - 1)
+        polygon(x, y, resolution / 2 - 1, vertexNumber);
       }
       if (grid[i][j] == 0){
-        fill(0);
+        fill(255);
         stroke(0)
-        polygon(x, y, resolution / 2 - 1, random(3, 8));
+        ellipse(x,y, resolution/2 - 1, resolution/2 - 1)
       }
     }
   }
@@ -153,4 +170,3 @@ function polygon(x, y, radius, numberOfPoints) {
 	}
 	endShape(CLOSE);	
 }
-
